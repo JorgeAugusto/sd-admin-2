@@ -34,7 +34,6 @@
    		</div>
    		
 		
-		<div class="table-responsive">
 			
 			<form method="GET" class="form-horizontal" action="/contatos" th:object="${filtro}">
 	   			<div class="form-group">
@@ -58,6 +57,7 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
+						<th>Id</th>
 						<th>Nome</th>
 						<th>E-mail</th>
 						<th>Status</th>
@@ -65,22 +65,33 @@
 					</tr>
 				</thead>
 				<tbody >
-				      <tr th:each="c: ${contatos}">  
+				      <tr th:each="c: ${contatos}">
+				      	<td th:text="${c.id}"></td>  
 				        <td th:text="${c.nome}"></td>
 				        <td th:text="${c.email}"></td>
 				        <td th:text="(${c.ativo} ? 'Ativo' : 'Inativo')"></td>
 				        <td>
 				        	<a th:href="@{contatos/edit/{id}(id=${c.id})}" type="button" class="btn btn-outline btn-primary">Editar</a>
-				        	<a th:href="@{contatos/delete/{id}(id=${c.id})}" type="button" class="btn btn-outline btn-danger">Excluir</a>
 				        	<a th:href="@{contatos/ativar/{id}(id=${c.id})}" type="button" class="btn btn-outline btn-warning">Ativar</a>
+				        	
+							<a type="button" class="btn  btn-outline btn-danger" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+								th:attr="data-id=${c.id} , data-nome=${c.nome}" >Excluir
+	   						</a>
 				        </td>
 				      </tr>
+				      
+				      <tr>
+	   					<td colspan="6" th:if="${#lists.isEmpty(contatos)}">Nenhum contato foi encontrado</td>
+	   				</tr>
 				</tbody>
 			</table>
-			<a th:href="@{/contatos/novo}" type="button" class="btn btn-outline btn-primary">Novo Contato</a>
-		</div>
+
+		<a th:href="@{/contatos/novo}" type="button" class="btn btn-outline btn-primary">Novo Contato</a>
 		
+		<div layout:include="pages/modal/excluirContatoModal"></div>
 			
     </div>
+
+	
 </section>
 </html>
